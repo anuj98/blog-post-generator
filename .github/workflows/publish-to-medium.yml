@@ -1,0 +1,38 @@
+name: Publish Blog to Medium
+
+on:
+  workflow_dispatch:
+    inputs:
+      blog_file:
+        description: 'Path to the markdown blog file to publish (e.g. drafts/2025-06-29-My_Blog.md)'
+        required: true
+
+
+jobs:
+  publish-to-medium:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout blog repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.BLOG_REPO || github.repository }}
+          token: ${{ secrets.BLOG_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          path: blogrepo
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests python-dotenv
+
+      - name: Publish to Medium
+        env:
+          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+          BLOG_FILE: blogrepo/${{ github.event.inputs.blog_file }}
+        run: |
+          python publish_to_medium.py
