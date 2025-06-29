@@ -1,0 +1,6 @@
+python-dotenv
+gspread
+google-auth
+PyGithub
+requests
+huggingface_hub
