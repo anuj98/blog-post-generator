@@ -1,26 +1,65 @@
 # Blog Generation and Deployment Automation
 
-This project automates the process of generating blog posts from ideas stored in a Google Sheet, fetching relevant images, saving drafts to GitHub for review, and is designed to be deployed as a Google Cloud Function. The workflow is triggered via GitHub Actions on a 24-hour schedule.
+This project automates the process of generating blog posts from ideas stored in a Google Sheet, fetching relevant images, saving drafts to GitHub for review, and publishing to Medium. Blog content is generated using a local LLM (Ollama), and the publishing process is handled via a GitHub Actions workflow.
+
 
 ## Features
 - Reads blog ideas from a Google Sheet (queue)
-- Uses a free Hugging Face Inference API for content generation
+- Uses a local Ollama LLM for content generation (no paid API required)
 - Fetches relevant images from Unsplash
 - Saves blog drafts as Markdown files in a GitHub repository for manual review
 - Marks processed ideas in the Google Sheet
-- Deployable as a Google Cloud Function
-- Automated scheduling via GitHub Actions
+- Automated publishing to Medium via GitHub Actions
+
+
+## Starter Kit / Prerequisites
+
+To get started, you need the following installed on your local machine:
+
+- **Python 3.11**
+- **Ollama** (for local LLM inference)
+  - Install from https://ollama.com/download
+  - Pull a model, e.g. `ollama pull llama2`
+- **pip** (Python package manager)
+- **Git**
+
+Install required Python packages:
+
+```sh
+pip install -r requirements.txt
+```
+
+You will also need:
+- Google Sheets API credentials (service account JSON)
+- Unsplash API key
+- GitHub personal access token (for committing drafts)
+- Medium integration token (for publishing)
 
 ## Setup
-1. Configure Google Sheets API access and share the sheet with your service account.
-2. Obtain API keys for Hugging Face Inference API and Unsplash.
+1. Set up Google Sheets API access:
+   - Go to https://console.cloud.google.com/apis/library/sheets.googleapis.com and enable the Google Sheets API for your project.
+   - Create a service account in the Google Cloud Console and download the JSON credentials file.
+   - In your Google Sheet, click "Share" and add the service account email (from the JSON file) with Editor access.
+   - Place the JSON credentials file in your project and reference it in your environment/config.
+2. Obtain API keys for Unsplash.
 3. Set up a GitHub repository with a personal access token for file commits.
-4. Deploy the script as a Google Cloud Function.
-5. Set up GitHub Actions to trigger the function every 24 hours.
+4. Set up Medium integration token (see Medium settings > Integration tokens).
+5. Install and run Ollama locally, and ensure the desired model is available (e.g. llama2).
+6. Set up GitHub Actions for automated publishing to Medium.
+
+
+## Blog Generation & Publishing Process
+
+1. Blog ideas are read from a Google Sheet.
+2. Blog content is generated using a local Ollama LLM.
+3. Relevant images are fetched from Unsplash.
+4. Drafts are saved as Markdown files in a GitHub repository for manual review.
+5. When ready, a GitHub Actions workflow can be triggered to publish a selected draft to Medium.
+6. The workflow checks out the blog repo, runs a Python script to publish the draft to Medium using your integration token, and prints the published URL.
 
 ## Manual Review
 Drafts are saved in the repository for manual review and approval before publishing.
 
 ---
 
-For more details, see the code and comments in the main script.
+For more details, see the code and comments in the main script and the `publish_to_medium.py` file.
