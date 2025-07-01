@@ -12,6 +12,10 @@ jobs:
   publish-to-wordpress:
     runs-on: ubuntu-latest
     steps:
+      - name: List workspace files
+        run: |
+          ls -al
+
       - name: Checkout blog repository
         uses: actions/checkout@v4
         with:
