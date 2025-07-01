@@ -12,19 +12,29 @@ jobs:
   publish-to-wordpress:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current repository
+      - name: Checkout workflow repository
         uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
 
       - name: Checkout blog repository
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.BLOG_REPO }}
+          repository: ${{ secrets.BLOG_REPO }}
           token: ${{ secrets.BLOG_REPO_TOKEN }}
           path: blogrepo
       
       - name: List workspace files
         run: |
           ls -al
+      
+      - name: List blogrepo
+        run: |
+          ls -al blogrepo
+      
+      - name: List blogrepo drafts
+        run: |
+          ls -al blogrepo/drafts
 
       - name: Set up Python
         uses: actions/setup-python@v5
