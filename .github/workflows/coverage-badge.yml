@@ -1,0 +1,60 @@
+name: Coverage Check and Badge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage
+
+      - name: Run tests and collect coverage
+        run: |
+          coverage run --source=main,publish_to_devto -m unittest discover -s tests
+          coverage report -m > coverage.txt
+          coverage_percent=$(coverage report | grep TOTAL | awk '{print $4}')
+          echo "COVERAGE_PERCENT=$coverage_percent" >> $GITHUB_ENV
+      
+      - name: Ensure badge directory exists
+        run: mkdir -p .github/badges
+
+      - name: Generate coverage badge
+        uses: tj-actions/coverage-badge-py@v2
+        with:
+          output: .github/badges/coverage.svg
+
+      - name: Add coverage badge to README
+        run: |
+          if grep -q 'img.shields.io/badge/Coverage' README.md; then
+            sed -i 's#https://img.shields.io/badge/Coverage-[^)]*#.github/badges/coverage.svg#' README.md
+          elif ! grep -q '.github/badges/coverage.svg' README.md; then
+            echo '![](.github/badges/coverage.svg)' >> README.md
+          fi
+
+      - name: Commit and push README.md if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md .github/badges/coverage.svg
+          git diff --cached --quiet || git commit -m "Update coverage badge [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,11 @@
-# Blog Generation and Deployment Automation
 
-This project automates the process of generating blog posts from ideas stored in a Google Sheet, fetching relevant images, saving drafts to GitHub for review, and publishing to Dev.to. Blog content is generated using a local LLM (Ollama), and the publishing process is handled via a GitHub Actions workflow.
+<div>
+  <h1>Blog Generation and Deployment Automation</h1>
+  <p><strong>Project Status</strong></p>
+  <p>
+    <img src=".github/badges/coverage.svg" alt="Coverage badge" id="coverage-badge"/>
+  </p>
+</div>
 
 
 ## Features
