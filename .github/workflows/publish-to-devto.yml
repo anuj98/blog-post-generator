@@ -1,5 +1,6 @@
-# This workflow publishes a selected blog draft to WordPress.com
-name: Publish Blog to WordPress
+
+# This workflow publishes a selected blog draft to dev.to
+name: Publish Blog to dev.to
 
 on:
   workflow_dispatch:
@@ -9,7 +10,7 @@ on:
         required: true
 
 jobs:
-  publish-to-wordpress:
+  publish-to-devto:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout workflow repository
@@ -23,33 +24,20 @@ jobs:
           repository: ${{ secrets.BLOG_REPO }}
           token: ${{ secrets.BLOG_REPO_TOKEN }}
           path: blogrepo
-      
-      - name: List workspace files
-        run: |
-          ls -al
-      
-      - name: List blogrepo
-        run: |
-          ls -al blogrepo
-      
-      - name: List blogrepo drafts
-        run: |
-          ls -al blogrepo/drafts
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests python-dotenv markdown
 
-      - name: Publish to WordPress
+      - name: Publish to dev.to
         env:
-          WP_ACCESS_TOKEN: ${{ secrets.WP_ACCESS_TOKEN }}
-          WP_SITE_ID: ${{ secrets.WP_SITE_ID }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           BLOG_FILE: blogrepo/${{ github.event.inputs.blog_file }}
         run: |
-          python publish_to_wordpress.py
+          python publish_to_devto.py

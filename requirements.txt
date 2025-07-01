@@ -3,5 +3,4 @@ gspread
 google-auth
 PyGithub
 requests
-huggingface_hub
 markdown

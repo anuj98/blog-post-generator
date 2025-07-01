@@ -1,6 +1,6 @@
 # Blog Generation and Deployment Automation
 
-This project automates the process of generating blog posts from ideas stored in a Google Sheet, fetching relevant images, saving drafts to GitHub for review, and publishing to Medium. Blog content is generated using a local LLM (Ollama), and the publishing process is handled via a GitHub Actions workflow.
+This project automates the process of generating blog posts from ideas stored in a Google Sheet, fetching relevant images, saving drafts to GitHub for review, and publishing to Dev.to. Blog content is generated using a local LLM (Ollama), and the publishing process is handled via a GitHub Actions workflow.
 
 
 ## Features
@@ -9,17 +9,18 @@ This project automates the process of generating blog posts from ideas stored in
 - Fetches relevant images from Unsplash
 - Saves blog drafts as Markdown files in a GitHub repository for manual review
 - Marks processed ideas in the Google Sheet
-- Automated publishing to Medium via GitHub Actions
+- Automated publishing to Dev.to via GitHub Actions
 
 
 ## Starter Kit / Prerequisites
 
 To get started, you need the following installed on your local machine:
 
-- **Python 3.11**
+- **Python 3.12**
 - **Ollama** (for local LLM inference)
   - Install from https://ollama.com/download
   - Pull a model, e.g. `ollama pull llama2`
+  - Open Command line and run `ollama run llama2`
 - **pip** (Python package manager)
 - **Git**
 
@@ -33,7 +34,7 @@ You will also need:
 - Google Sheets API credentials (service account JSON)
 - Unsplash API key
 - GitHub personal access token (for committing drafts)
-- Medium integration token (for publishing)
+- Dev.to integration token (for publishing)
 
 ## Setup
 1. Set up Google Sheets API access:
@@ -43,9 +44,9 @@ You will also need:
    - Place the JSON credentials file in your project and reference it in your environment/config.
 2. Obtain API keys for Unsplash.
 3. Set up a GitHub repository with a personal access token for file commits.
-4. Set up Medium integration token (see Medium settings > Integration tokens).
+4. Set up Dev.to integration token (see Settings > Extension > API Keys).
 5. Install and run Ollama locally, and ensure the desired model is available (e.g. llama2).
-6. Set up GitHub Actions for automated publishing to Medium.
+6. Set up GitHub Actions for automated publishing to Dev.to.
 
 
 ## Blog Generation & Publishing Process
@@ -54,8 +55,8 @@ You will also need:
 2. Blog content is generated using a local Ollama LLM.
 3. Relevant images are fetched from Unsplash.
 4. Drafts are saved as Markdown files in a GitHub repository for manual review.
-5. When ready, a GitHub Actions workflow can be triggered to publish a selected draft to Medium.
-6. The workflow checks out the blog repo, runs a Python script to publish the draft to Medium using your integration token, and prints the published URL.
+5. When ready, a GitHub Actions workflow can be triggered to publish a selected draft to Dev.to.
+6. The workflow checks out the blog repo, runs a Python script to publish the draft to Dev.to using your integration token, and prints the published URL.
 
 ## Manual Review
 Drafts are saved in the repository for manual review and approval before publishing.
